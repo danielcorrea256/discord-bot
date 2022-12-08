@@ -2,7 +2,11 @@ from dotenv import load_dotenv
 import discord
 import os
 import requests
-import random
+
+def generate_latex(eq):
+    url = "https://latex.codecogs.com/png.image?\dpi{150}\\bg{white}"
+    url += eq.replace(" ", "").replace("+", "&plus;").replace("\b", "\\b")
+    return url
 
 def generate_quote():
     try:
@@ -32,5 +36,7 @@ async def on_message(message):
         await message.channel.send("hello")
     elif message.content.startswith("$quote please"):
         await message.channel.send(generate_quote())
+    elif message.content.startswith("$$") and message.content.endswith("$$"):
+        await message.channel.send(generate_latex(message.content[2:-2]))
 
 client.run(os.environ.get("TOKEN"))
